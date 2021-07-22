@@ -37,6 +37,8 @@ public class Commerciante extends AbstractEntity implements Cloneable{
 	public void setpIva(String pIva) {
 		this.pIva = pIva;
 	}
+
+
 	
 	
 
