@@ -12,8 +12,7 @@ import java.util.List;
 public interface NegozioRepository extends JpaRepository<Negozio,Long>{
 
 
-    @Query("select c from Negozio c " +
-            "where (c.commerciante.nomeCommerciante) like (:searchTerm) ")
+    @Query("SELECT c FROM Negozio c WHERE c.commerciante = :searchTerm")
     List<Negozio> search(@Param("searchTerm") String searchTerm);
 
 

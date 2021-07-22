@@ -34,8 +34,13 @@ public class NegozioService {
 					notification.open();
 		}
 
-		//negozioRepository.findOne(commerciante).getVetrina().add(prodotto);
-		  negozioRepository.search(searchTerm).get(0).getVetrina().add(prodotto);
+
+		 Negozio negozio = negozioRepository.search(searchTerm).get(0);
+		negozio.getVetrina().add(prodotto);
+		negozio.toString();
+		if(negozio==null){System.out.println("null");}
+		negozioRepository.save(negozio);
+		System.out.println("qui");
 
 		}
 

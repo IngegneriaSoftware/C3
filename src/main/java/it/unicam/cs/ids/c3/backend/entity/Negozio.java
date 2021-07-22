@@ -63,5 +63,13 @@ public class Negozio extends AbstractEntity implements Cloneable {
         this.vetrina = vetrina;
     }
 
-
+    @Override
+    public String toString() {
+        return "Negozio{" +
+                "nomeNegozio='" + nomeNegozio + '\'' +
+                ", indirizzo='" + indirizzo + '\'' +
+                ", vetrina=" + vetrina +
+                ", commerciante=" + commerciante +
+                '}';
+    }
 }

@@ -50,7 +50,14 @@ public class Prodotto extends AbstractEntity implements Cloneable {
 	public void setQuantita(int quantita) {
 		this.quantita = quantita;
 	}
-	
-	
-	
+
+
+	@Override
+	public String toString() {
+		return "Prodotto{" +
+				"descrizione=" + descrizione +
+				", quantita=" + quantita +
+				", negozio=" + negozio +
+				'}';
+	}
 }
