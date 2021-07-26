@@ -8,17 +8,17 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Negozio extends AbstractEntity implements Cloneable {
+public class Negozio extends AbstractEntity  {
 
-    @NotNull
-    @NotEmpty
+
     private String nomeNegozio;
-    @NotNull
-    @NotEmpty
+
     private String indirizzo;
 
 
-    @OneToMany(mappedBy = "negozio", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Prodotto.class, mappedBy = "negozio", cascade = {CascadeType.MERGE} ,fetch = FetchType.EAGER,orphanRemoval=true)
+   // @JoinColumn(name = "prodotto_id")
+   // @Basic
     private List<Prodotto> vetrina ;
 
 
@@ -26,10 +26,17 @@ public class Negozio extends AbstractEntity implements Cloneable {
 
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="commerciante_nomeCommerciante")
+    @JoinColumn(name="commerciante_id")
     private Commerciante commerciante;
 
     public Negozio() {
+    }
+
+    public Negozio(String nomeNegozio, String indirizzo, List<Prodotto> vetrina, Commerciante commerciante) {
+        this.nomeNegozio = nomeNegozio;
+        this.indirizzo = indirizzo;
+        this.vetrina = vetrina;
+        this.commerciante = commerciante;
     }
 
     public Negozio(String nomeNegozio, String indirizzo, Commerciante commerciante) {
@@ -63,13 +70,11 @@ public class Negozio extends AbstractEntity implements Cloneable {
         this.vetrina = vetrina;
     }
 
-    @Override
-    public String toString() {
-        return "Negozio{" +
-                "nomeNegozio='" + nomeNegozio + '\'' +
-                ", indirizzo='" + indirizzo + '\'' +
-                ", vetrina=" + vetrina +
-                ", commerciante=" + commerciante +
-                '}';
+    public Commerciante getCommerciante() {
+        return commerciante;
+    }
+
+    public void setCommerciante(Commerciante commerciante) {
+        this.commerciante = commerciante;
     }
 }

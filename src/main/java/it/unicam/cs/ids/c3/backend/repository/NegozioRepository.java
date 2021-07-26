@@ -12,7 +12,7 @@ import java.util.List;
 public interface NegozioRepository extends JpaRepository<Negozio,Long>{
 
 
-    @Query("SELECT c FROM Negozio c WHERE c.commerciante = :searchTerm")
+    @Query("SELECT c FROM Negozio c WHERE c.commerciante.nomeCommerciante = :searchTerm")
     List<Negozio> search(@Param("searchTerm") String searchTerm);
 
 

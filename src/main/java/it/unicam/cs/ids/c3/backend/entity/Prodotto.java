@@ -1,25 +1,21 @@
 package it.unicam.cs.ids.c3.backend.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
-public class Prodotto extends AbstractEntity implements Cloneable {
+public class Prodotto extends AbstractEntity implements Serializable {
 	
-	  @NotNull
-	  @NotEmpty
-	  @ManyToOne
+
+	 @ManyToOne
 	  @JoinColumn(name="descrizioneProdotto_id")
 	  private DescrizioneProdotto descrizione;
-	  @NotNull
-	  @NotEmpty
+
 	  private int quantita;
 	 
-	  @ManyToOne
+	  @ManyToOne(targetEntity = Negozio.class)
 	  @JoinColumn(name="negozio_id")
 	  private Negozio negozio;
 
@@ -36,6 +32,7 @@ public class Prodotto extends AbstractEntity implements Cloneable {
 		return descrizione;
 	}
 
+	public String getNomeProdotto(){return descrizione.getNomeProdotto();}
 
 	public void setDescrizione(DescrizioneProdotto descrizione) {
 		this.descrizione = descrizione;
@@ -51,13 +48,11 @@ public class Prodotto extends AbstractEntity implements Cloneable {
 		this.quantita = quantita;
 	}
 
+	public Negozio getNegozio() {
+		return negozio;
+	}
 
-	@Override
-	public String toString() {
-		return "Prodotto{" +
-				"descrizione=" + descrizione +
-				", quantita=" + quantita +
-				", negozio=" + negozio +
-				'}';
+	public void setNegozio(Negozio negozio) {
+		this.negozio = negozio;
 	}
 }

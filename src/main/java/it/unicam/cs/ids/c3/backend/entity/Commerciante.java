@@ -7,11 +7,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Commerciante extends AbstractEntity implements Cloneable{
 	 
-	  @NotNull
-	  @NotEmpty
+
 	private String nomeCommerciante;
-	  @NotNull
-	  @NotEmpty
 	  private String pIva;
 	
 	public Commerciante() {}

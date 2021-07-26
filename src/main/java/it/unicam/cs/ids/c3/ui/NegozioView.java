@@ -1,8 +1,6 @@
 package it.unicam.cs.ids.c3.ui;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -28,10 +26,10 @@ public class NegozioView extends VerticalLayout {
     CommercianteService commercianteService;
     DescrizioneProdottoService descrizioneProdottoService;
     private Grid<Prodotto> grid = new Grid<>(Prodotto.class);
-    private Select<Commerciante> commercianteSelect = new Select<>();
+    private Select<Negozio> negozioSelect = new Select<>();
     private Select<DescrizioneProdotto> descrizioneProdottoSelect = new Select<>();
     private IntegerField quantity = new IntegerField();
-    Button addButton = new Button(new Icon(VaadinIcon.ADD_DOCK));
+    Button addButton = new Button(new Icon(VaadinIcon.PLUS_CIRCLE));
 
     public NegozioView(NegozioService negozioService, CommercianteService commercianteService, DescrizioneProdottoService descrizioneProdottoService) {
         this.negozioService = negozioService;
@@ -39,21 +37,20 @@ public class NegozioView extends VerticalLayout {
         this.descrizioneProdottoService = descrizioneProdottoService;
         addClassName("list-view");
         setSizeFull();
-        HorizontalLayout horizontalLayout = new HorizontalLayout(commercianteSelect,descrizioneProdottoSelect,quantity,addButton);
-        addButton.addClickListener(e -> addProduct(commercianteSelect.getValue(),descrizioneProdottoSelect.getValue(),quantity.getValue()));
+        HorizontalLayout horizontalLayout = new HorizontalLayout(negozioSelect,descrizioneProdottoSelect,quantity,addButton);
+        addButton.addClickListener(e -> addProduct(negozioSelect.getValue(),descrizioneProdottoSelect.getValue(),quantity.getValue()));
         setComponents();
         configureGrid();
         add(horizontalLayout,grid);
-       // updateList();
+        updateList();
     }
 
-    private void updateList() {grid.setItems(negozioService.search(commercianteSelect.getValue().getNomeCommerciante()).get(0).getVetrina());
-    }
+    private void updateList() {grid.setItems(negozioService.getById(negozioSelect.getValue().getId()).getVetrina()); }
 
 
     private void setComponents(){
-        commercianteSelect.setItemLabelGenerator(Commerciante::getNomeCommerciante);
-        commercianteSelect.setItems(commercianteService.findAll());
+        negozioSelect.setItemLabelGenerator(Negozio::getNomeNegozio);
+        negozioSelect.setItems(negozioService.findAll());
         descrizioneProdottoSelect.setItemLabelGenerator(DescrizioneProdotto::getNomeProdotto);
        descrizioneProdottoSelect.setItems(descrizioneProdottoService.findAll());
        quantity.setHasControls(true);
@@ -61,11 +58,12 @@ public class NegozioView extends VerticalLayout {
 
     }
 
-    private void addProduct(Commerciante commercianteSelectValue, DescrizioneProdotto value, Integer value1) {
+    private void addProduct(Negozio negozioSelectValue, DescrizioneProdotto value, Integer value1) {
         Notification notification = new Notification("Negozio non trovato", 3000);
         notification.open();
         Prodotto prodotto = new Prodotto(value,value1);
-        negozioService.addProduct(commercianteSelectValue.getNomeCommerciante(),prodotto);
+        prodotto.setNegozio(negozioSelectValue);
+        negozioService.addProduct(negozioSelectValue.getId(),prodotto);
         updateList();
     }
 
