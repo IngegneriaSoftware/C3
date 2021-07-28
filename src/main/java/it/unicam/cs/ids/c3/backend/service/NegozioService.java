@@ -1,11 +1,15 @@
 package it.unicam.cs.ids.c3.backend.service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.vaadin.flow.component.notification.Notification;
 import it.unicam.cs.ids.c3.backend.entity.Commerciante;
+import it.unicam.cs.ids.c3.backend.entity.DescrizioneProdotto;
 import it.unicam.cs.ids.c3.backend.entity.Prodotto;
 import it.unicam.cs.ids.c3.backend.repository.CommercianteRepository;
+import it.unicam.cs.ids.c3.backend.repository.DescrizioneProdottoRepository;
+import it.unicam.cs.ids.c3.backend.repository.ProdottoRepository;
 import org.springframework.stereotype.Service;
 
 import it.unicam.cs.ids.c3.backend.entity.Negozio;
@@ -18,24 +22,37 @@ public class NegozioService {
 
 	private NegozioRepository negozioRepository;
 	private CommercianteRepository commerianteRepository;
+	private ProdottoRepository prodottoRepository;
+	private DescrizioneProdottoRepository descrizioneProdottoRepository;
+    private ProdottoService prodottoService ;
 
-	public NegozioService(NegozioRepository negozioRepository, CommercianteRepository commerianteRepository) {
+	public NegozioService(NegozioRepository negozioRepository, CommercianteRepository commerianteRepository, ProdottoRepository prodottoRepository, DescrizioneProdottoRepository descrizioneProdottoRepository, ProdottoService prodottoService) {
 		this.negozioRepository = negozioRepository;
 		this.commerianteRepository = commerianteRepository;
+		this.prodottoRepository = prodottoRepository;
+		this.descrizioneProdottoRepository = descrizioneProdottoRepository;
+		this.prodottoService = prodottoService;
 	}
 
 	public List<Negozio> findAll(){
 		return negozioRepository.findAll();
 	}
 
-	public void addProduct(String searchTerm, Prodotto prodotto){
-		if (searchTerm== null || searchTerm.isEmpty() ) {
+	public Negozio save(Negozio negozio){return negozioRepository.save(negozio);}
+
+
+	public  Negozio getById(Long id){ return negozioRepository.getById(id);}
+
+	public void addProduct(Long id, Prodotto prodotto){
+		if (id== null ) {
 			Notification notification = new Notification("Negozio non trovato", 3000);
 					notification.open();
 		}
 
-		//negozioRepository.findOne(commerciante).getVetrina().add(prodotto);
-		  negozioRepository.search(searchTerm).get(0).getVetrina().add(prodotto);
+
+		//negozioRepository.getById(id).getVetrina().add(prodotto);
+		this.getById(id).getVetrina().add(prodotto);
+		System.out.println("qui");
 
 		}
 
@@ -43,17 +60,32 @@ public class NegozioService {
 		return negozioRepository.search(searchTerm);
 	}
 
-	@PostConstruct
+/*	@PostConstruct
 	public void populateTestData() {
-		if(negozioRepository.count()==0){
+            negozioRepository.deleteAll();
+		DescrizioneProdotto descrizioneProdotto = new DescrizioneProdotto("0014","Articolo 4","Articolo 4");
+		descrizioneProdottoRepository.save(descrizioneProdotto);
 		Commerciante comm1 = new Commerciante("Mario Rossi","86334519757");
-		Negozio neg1  = new Negozio("Da Rossi","Via Garibaldi, 12",comm1);
-		Commerciante comm2 = new Commerciante("Luigi Bianchi","123456789");
-		Negozio neg2  = new Negozio("Da Bianchi","Via Garibaldi, 13",comm2);
 		commerianteRepository.save(comm1);
-		commerianteRepository.save(comm2);
+		Prodotto prodotto = new Prodotto(descrizioneProdotto,1);
+		prodottoRepository.save(prodotto);
+		LinkedList<Prodotto> list = new LinkedList();
+		list.add(prodotto);
+		Negozio neg1 = new Negozio("Da Rossi","Via Garibaldi 12",list,comm1);
+		//prodotto.setNegozio(neg1);
+		prodottoService.findById(prodotto.getId()).get().setNegozio(neg1);
+		prodottoService.save(prodottoService.findById(prodotto.getId()).get());
 		negozioRepository.save(neg1);
-		negozioRepository.save(neg2);}
-	}
+
+
+
+
+		//Commerciante comm2 = new Commerciante("Luigi Bianchi","123456789");
+		//Negozio neg2  = new Negozio("Da Bianchi","Via Garibaldi, 13",list,comm2);
+
+	//	commerianteRepository.save(comm2);
+
+	//	negozioRepository.save(neg2);
+	}*/
 	
 }

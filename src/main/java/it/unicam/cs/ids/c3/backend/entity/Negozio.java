@@ -1,5 +1,8 @@
 package it.unicam.cs.ids.c3.backend.entity;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,34 +11,41 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Negozio extends AbstractEntity implements Cloneable {
+public class Negozio extends AbstractEntity implements Serializable {
 
-    @NotNull
-    @NotEmpty
+
     private String nomeNegozio;
-    @NotNull
-    @NotEmpty
+
     private String indirizzo;
 
 
-    @OneToMany(mappedBy = "negozio", fetch = FetchType.EAGER)
-    private List<Prodotto> vetrina ;
+    @OneToMany(targetEntity = Prodotto.class, mappedBy = "negozio", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, orphanRemoval = true)
+   // @JoinColumn(name = "prodotto_id")
+   /* @OneToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            mappedBy = "negozio"
+    )*/
+  //  @ElementCollection(targetClass = Prodotto.class)
+    private List<Prodotto> vetrina= new ArrayList<>();
 
 
-
-
-
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="commerciante_nomeCommerciante")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "commerciante_id")
     private Commerciante commerciante;
 
     public Negozio() {
     }
 
+    public Negozio(String nomeNegozio, String indirizzo, ArrayList<Prodotto> vetrina, Commerciante commerciante) {
+        this.nomeNegozio = nomeNegozio;
+        this.indirizzo = indirizzo;
+        this.vetrina = vetrina;
+        this.commerciante = commerciante;
+    }
+
     public Negozio(String nomeNegozio, String indirizzo, Commerciante commerciante) {
         this.nomeNegozio = nomeNegozio;
         this.indirizzo = indirizzo;
-        this.vetrina = new LinkedList<>();
         this.commerciante = commerciante;
     }
 
@@ -59,9 +69,13 @@ public class Negozio extends AbstractEntity implements Cloneable {
         return vetrina;
     }
 
-    public void setVetrina(List<Prodotto> vetrina) {
-        this.vetrina = vetrina;
+    public void setVetrina(ArrayList<Prodotto> vetrina) { this.vetrina = vetrina; }
+
+    public Commerciante getCommerciante() {
+        return commerciante;
     }
 
-
+    public void setCommerciante(Commerciante commerciante) {
+        this.commerciante = commerciante;
+    }
 }

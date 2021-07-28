@@ -7,14 +7,11 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class DescrizioneProdotto extends AbstractEntity implements Cloneable{
 	
-	  @NotNull
-	  @NotEmpty
+
 	private String codiceProdotto;
-	  @NotNull
-	  @NotEmpty
+
 	private String nomeProdotto;
-	  @NotNull
-	  @NotEmpty
+
 	  private String descrizioneProdotto;
 	
 	public DescrizioneProdotto() {}

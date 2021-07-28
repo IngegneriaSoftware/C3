@@ -20,6 +20,8 @@ public class MainLayout extends AppLayout {
 		Image img = new Image("images/C3-logos_transparent.png","Logo");
 		img.setHeight("50px");
 		addMenuTab("Prodotti", DescrizioneProdottoView.class);
+		addMenuTab("Negozi", NegozioView.class);
+		addMenuTab("Crea Negozio", NegozioFormView.class);
 		addToNavbar(img,tabs);
 	}
 
