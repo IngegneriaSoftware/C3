@@ -15,8 +15,16 @@ public class Prodotto extends AbstractEntity implements Serializable {
 
 	  private int quantita;
 	 
-	  @ManyToOne(targetEntity = Negozio.class)
-	  @JoinColumn(name="negozio_id")
+	 @ManyToOne(targetEntity = Negozio.class)
+	 // @JoinColumn(name="negozio_id")
+	/*@ManyToOne(targetEntity = Negozio.class)
+	 @MapsId("negozioId")
+	 @JoinColumn(
+			 name = "negozio_id",
+			 foreignKey = @ForeignKey(
+					 name = "negozio_prodotto_id_fk"
+			 )
+	 )*/
 	  private Negozio negozio;
 
 	public Prodotto() {}
