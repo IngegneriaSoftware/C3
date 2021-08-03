@@ -18,35 +18,40 @@ public class Negozio extends AbstractEntity implements Serializable {
 
     private String indirizzo;
 
+    private Categoria categoria;
+
 
     @OneToMany(targetEntity = Prodotto.class, mappedBy = "negozio", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, orphanRemoval = true)
-   // @JoinColumn(name = "prodotto_id")
+    // @JoinColumn(name = "prodotto_id")
    /* @OneToMany(
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             mappedBy = "negozio"
     )*/
-  //  @ElementCollection(targetClass = Prodotto.class)
-    private List<Prodotto> vetrina= new ArrayList<>();
+    //  @ElementCollection(targetClass = Prodotto.class)
+    private List<Prodotto> vetrina = new ArrayList<>();
 
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "commerciante_id")
     private Commerciante commerciante;
 
+
     public Negozio() {
     }
 
-    public Negozio(String nomeNegozio, String indirizzo, ArrayList<Prodotto> vetrina, Commerciante commerciante) {
+    public Negozio(String nomeNegozio, String indirizzo, ArrayList<Prodotto> vetrina, Commerciante commerciante, Categoria categoria) {
         this.nomeNegozio = nomeNegozio;
         this.indirizzo = indirizzo;
         this.vetrina = vetrina;
         this.commerciante = commerciante;
+        this.categoria = categoria;
     }
 
-    public Negozio(String nomeNegozio, String indirizzo, Commerciante commerciante) {
+    public Negozio(String nomeNegozio, String indirizzo, Commerciante commerciante, Categoria categoria) {
         this.nomeNegozio = nomeNegozio;
         this.indirizzo = indirizzo;
         this.commerciante = commerciante;
+        this.categoria = categoria;
     }
 
     public String getNomeNegozio() {
@@ -78,4 +83,10 @@ public class Negozio extends AbstractEntity implements Serializable {
     public void setCommerciante(Commerciante commerciante) {
         this.commerciante = commerciante;
     }
+
+    public Categoria getCategoria() { return categoria; }
+
+    public void setCategoria(Categoria categoria) { this.categoria = categoria; }
+
+    public void setVetrina(List<Prodotto> vetrina) { this.vetrina = vetrina; }
 }

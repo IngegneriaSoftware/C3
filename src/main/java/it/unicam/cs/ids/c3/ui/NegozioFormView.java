@@ -15,19 +15,16 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import it.unicam.cs.ids.c3.backend.entity.Commerciante;
-import it.unicam.cs.ids.c3.backend.entity.DescrizioneProdotto;
-import it.unicam.cs.ids.c3.backend.entity.Negozio;
-import it.unicam.cs.ids.c3.backend.entity.Prodotto;
+import it.unicam.cs.ids.c3.backend.entity.*;
 import it.unicam.cs.ids.c3.backend.service.CommercianteService;
 import it.unicam.cs.ids.c3.backend.service.DescrizioneProdottoService;
 import it.unicam.cs.ids.c3.backend.service.NegozioService;
 import it.unicam.cs.ids.c3.backend.service.ProdottoService;
 
-import javax.swing.*;
+
 import java.util.ArrayList;
 
-@Route(value = "negozioform", layout = MainLayout.class)
+@Route(value = "negozioform", layout = CommercianteLayout.class)
 @PageTitle("Crea negozio")
 public class NegozioFormView extends HorizontalLayout {
 
@@ -36,6 +33,7 @@ public class NegozioFormView extends HorizontalLayout {
     private TextField nome = new TextField();
     private TextField indirizzo = new TextField();
     private Select<Commerciante> commercianteSelect = new Select<>();
+    private Select<Categoria> categoriaSelect = new Select<>();
     private Select<DescrizioneProdotto> prodottoSelect = new Select<>();
     private Button addProductButton = new Button(new Icon(VaadinIcon.PLUS_CIRCLE));
     private Button saveButton = new Button("Save");
@@ -70,6 +68,7 @@ public class NegozioFormView extends HorizontalLayout {
         negozio.setNomeNegozio(nome.getValue());
         negozio.setCommerciante(commercianteSelect.getValue());
         negozio.setIndirizzo(indirizzo.getValue());
+        negozio.setCategoria(categoriaSelect.getValue());
         negozio.setVetrina(products);
         negozioService.save(negozio);
 
@@ -92,9 +91,10 @@ public class NegozioFormView extends HorizontalLayout {
         commercianteSelect.setLabel("Commerciante");
         commercianteSelect.setItemLabelGenerator(Commerciante::getNomeCommerciante);
         commercianteSelect.setItems(commercianteService.findAll());
-
+        categoriaSelect.setLabel("Categoria");
+        categoriaSelect.setItems(Categoria.values());
         VerticalLayout layout = new VerticalLayout();
-        layout.add(title, nome, indirizzo, commercianteSelect);
+        layout.add(title, nome, indirizzo,categoriaSelect, commercianteSelect);
         return layout;
     }
 
