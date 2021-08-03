@@ -7,7 +7,7 @@ import com.vaadin.flow.router.Route;
 import it.unicam.cs.ids.c3.backend.entity.DescrizioneProdotto;
 import it.unicam.cs.ids.c3.backend.service.DescrizioneProdottoService;
 
-@Route(value="", layout = MainLayout.class)
+@Route(value="prodotti", layout = CommercianteLayout.class)
 @PageTitle("Prodotti")
 public class DescrizioneProdottoView extends VerticalLayout{
 

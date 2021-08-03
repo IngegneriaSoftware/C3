@@ -4,15 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.vaadin.flow.component.notification.Notification;
-import it.unicam.cs.ids.c3.backend.entity.Commerciante;
-import it.unicam.cs.ids.c3.backend.entity.DescrizioneProdotto;
-import it.unicam.cs.ids.c3.backend.entity.Prodotto;
+import it.unicam.cs.ids.c3.backend.entity.*;
 import it.unicam.cs.ids.c3.backend.repository.CommercianteRepository;
 import it.unicam.cs.ids.c3.backend.repository.DescrizioneProdottoRepository;
 import it.unicam.cs.ids.c3.backend.repository.ProdottoRepository;
 import org.springframework.stereotype.Service;
 
-import it.unicam.cs.ids.c3.backend.entity.Negozio;
 import it.unicam.cs.ids.c3.backend.repository.NegozioRepository;
 
 import javax.annotation.PostConstruct;
@@ -38,6 +35,18 @@ public class NegozioService {
 		return negozioRepository.findAll();
 	}
 
+	public List<Negozio> findAll(String stringFilter) {
+		if (stringFilter == null || stringFilter.isEmpty()) {
+			return negozioRepository.findAll();
+		} else {
+			return negozioRepository.search(stringFilter);
+		}
+	}
+
+	public List<Negozio> findAll(Categoria categoria){
+		return negozioRepository.searchByCategoria(categoria);
+	}
+
 	public Negozio save(Negozio negozio){return negozioRepository.save(negozio);}
 
 
@@ -59,6 +68,8 @@ public class NegozioService {
     public List<Negozio> search(String searchTerm){
 		return negozioRepository.search(searchTerm);
 	}
+
+
 
 /*	@PostConstruct
 	public void populateTestData() {

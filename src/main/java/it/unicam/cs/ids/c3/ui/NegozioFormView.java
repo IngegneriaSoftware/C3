@@ -21,10 +21,10 @@ import it.unicam.cs.ids.c3.backend.service.DescrizioneProdottoService;
 import it.unicam.cs.ids.c3.backend.service.NegozioService;
 import it.unicam.cs.ids.c3.backend.service.ProdottoService;
 
-import javax.swing.*;
+
 import java.util.ArrayList;
 
-@Route(value = "negozioform", layout = MainLayout.class)
+@Route(value = "negozioform", layout = CommercianteLayout.class)
 @PageTitle("Crea negozio")
 public class NegozioFormView extends HorizontalLayout {
 
