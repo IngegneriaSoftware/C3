@@ -1,21 +1,15 @@
 package it.unicam.cs.ids.c3.ui;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.router.HighlightConditions;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
-
-import javax.swing.text.html.ListView;
+import it.unicam.cs.ids.c3.ui.cliente_ui.MostraPuntiVenditaView;
+import it.unicam.cs.ids.c3.ui.commerciante_ui.NegozioView;
 
 
 public class MainLayout extends AppLayout {

@@ -31,6 +31,9 @@ public class NegozioService {
 		this.prodottoService = prodottoService;
 	}
 
+
+	public Negozio save(Negozio negozio){return  negozioRepository.save(negozio);}
+
 	public List<Negozio> findAll(){
 		return negozioRepository.findAll();
 	}
@@ -47,12 +50,12 @@ public class NegozioService {
 		return negozioRepository.searchByCategoria(categoria);
 	}
 
-	public Negozio save(Negozio negozio){return negozioRepository.save(negozio);}
+	public Negozio addNegozio(Negozio negozio){return negozioRepository.save(negozio);}
 
 
 	public  Negozio getById(Long id){ return negozioRepository.getById(id);}
 
-	public void addProduct(Long id, Prodotto prodotto){
+	public void addProdotto(Long id, Prodotto prodotto){
 		if (id== null ) {
 			Notification notification = new Notification("Negozio non trovato", 3000);
 					notification.open();

@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.c3.ui;
+package it.unicam.cs.ids.c3.ui.commerciante_ui;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -17,6 +17,7 @@ import it.unicam.cs.ids.c3.backend.entity.Prodotto;
 import it.unicam.cs.ids.c3.backend.service.CommercianteService;
 import it.unicam.cs.ids.c3.backend.service.DescrizioneProdottoService;
 import it.unicam.cs.ids.c3.backend.service.NegozioService;
+import it.unicam.cs.ids.c3.ui.commerciante_ui.CommercianteLayout;
 
 import java.util.List;
 
@@ -61,8 +62,10 @@ public class NegozioView extends VerticalLayout {
 
     private void addToGrid() {
        Prodotto prodotto = new Prodotto(prodottiSelect.getValue(),qty.getValue());
-        negozioSelect.getValue().getVetrina().add(prodotto);
-       showNegozio(negozioSelect.getValue());
+       Negozio negozio = negozioSelect.getValue();
+       negozio.getVetrina().add(prodotto);
+        negozioService.save(negozio);
+        showNegozio(negozio);
     }
 
     private void setComponents(){

@@ -13,6 +13,10 @@ public class Prodotto extends AbstractEntity implements Serializable {
 	  @JoinColumn(name="descrizioneProdotto_id")
 	  private DescrizioneProdotto descrizione;
 
+	@ManyToOne
+	@JoinColumn(name="ordine_id")
+	 private Ordine ordine;
+
 	  private int quantita;
 	 
 	 @ManyToOne(targetEntity = Negozio.class)

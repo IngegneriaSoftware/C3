@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.c3.ui;
+package it.unicam.cs.ids.c3.ui.commerciante_ui;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -7,6 +7,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -20,13 +21,14 @@ import it.unicam.cs.ids.c3.backend.service.CommercianteService;
 import it.unicam.cs.ids.c3.backend.service.DescrizioneProdottoService;
 import it.unicam.cs.ids.c3.backend.service.NegozioService;
 import it.unicam.cs.ids.c3.backend.service.ProdottoService;
+import it.unicam.cs.ids.c3.ui.commerciante_ui.CommercianteLayout;
 
 
 import java.util.ArrayList;
 
-@Route(value = "negozioform", layout = CommercianteLayout.class)
+@Route(value = "creanegozio", layout = CommercianteLayout.class)
 @PageTitle("Crea negozio")
-public class NegozioFormView extends HorizontalLayout {
+public class CreaNegozioView extends HorizontalLayout {
 
     private ArrayList<DescrizioneProdotto> productsDescriptions = new ArrayList<>();
     private ArrayList<Prodotto> products = new ArrayList<>();
@@ -43,7 +45,8 @@ public class NegozioFormView extends HorizontalLayout {
     private DescrizioneProdottoService descrizioneProdottoService;
     private NegozioService negozioService;
 
-    public NegozioFormView(CommercianteService commercianteService, ProdottoService prodottoService, DescrizioneProdottoService descrizioneProdottoService,NegozioService negozioService) {
+
+    public CreaNegozioView(CommercianteService commercianteService, ProdottoService prodottoService, DescrizioneProdottoService descrizioneProdottoService, NegozioService negozioService) {
         this.commercianteService = commercianteService;
         this.prodottoService = prodottoService;
         this.descrizioneProdottoService = descrizioneProdottoService;
@@ -60,7 +63,7 @@ public class NegozioFormView extends HorizontalLayout {
 
     private void createNegozio() {
         Negozio negozio = new Negozio();
-        negozioService.save(negozio);
+        negozioService.addNegozio(negozio);
         for(int  i=0;i<products.size();i++){
             products.get(i).setNegozio(negozio);
             prodottoService.save(products.get(i));
@@ -70,8 +73,10 @@ public class NegozioFormView extends HorizontalLayout {
         negozio.setIndirizzo(indirizzo.getValue());
         negozio.setCategoria(categoriaSelect.getValue());
         negozio.setVetrina(products);
-        negozioService.save(negozio);
-
+        negozioService.addNegozio(negozio);
+        Notification notification = new Notification("Negozio creato");
+        notification.setDuration(3000);
+        notification.open();
     }
 
     private void addToGrid() {

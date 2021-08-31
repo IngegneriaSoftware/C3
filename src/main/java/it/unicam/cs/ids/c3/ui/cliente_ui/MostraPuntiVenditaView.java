@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.c3.ui;
+package it.unicam.cs.ids.c3.ui.cliente_ui;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
@@ -13,6 +13,7 @@ import com.vaadin.flow.router.Route;
 import it.unicam.cs.ids.c3.backend.entity.Categoria;
 import it.unicam.cs.ids.c3.backend.entity.Negozio;
 import it.unicam.cs.ids.c3.backend.service.NegozioService;
+import it.unicam.cs.ids.c3.ui.cliente_ui.ClienteLayout;
 
 @Route(value = "puntivendita", layout = ClienteLayout.class)
 @PageTitle("Mostra punti vendita")

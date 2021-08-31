@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.c3.ui;
+package it.unicam.cs.ids.c3.ui.cliente_ui;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -6,6 +6,7 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
+import it.unicam.cs.ids.c3.ui.MainView;
 
 import java.util.HashMap;
 import java.util.Map;
