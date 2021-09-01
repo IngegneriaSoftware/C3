@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
-public class Prodotto extends AbstractEntity implements Serializable {
+public class Prodotto extends AbstractEntity implements Serializable,Cloneable {
 	
 
 	 @ManyToOne
@@ -66,5 +66,10 @@ public class Prodotto extends AbstractEntity implements Serializable {
 
 	public void setNegozio(Negozio negozio) {
 		this.negozio = negozio;
+	}
+
+	@Override
+	public Prodotto clone() throws CloneNotSupportedException {
+		return (Prodotto) super.clone();
 	}
 }

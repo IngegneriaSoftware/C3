@@ -6,6 +6,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -19,9 +20,9 @@ import com.vaadin.flow.router.Route;
 import it.unicam.cs.ids.c3.backend.entity.*;
 import it.unicam.cs.ids.c3.backend.service.ClienteService;
 import it.unicam.cs.ids.c3.backend.service.NegozioService;
+import it.unicam.cs.ids.c3.backend.service.OrdineService;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,7 @@ public class CreaOrdineView extends HorizontalLayout {
    private TextField filterText = new TextField();
    private ClienteService clienteService;
    private NegozioService negozioService;
+   private OrdineService ordineService;
    private Select<Negozio> negozioSelect = new Select<>();
    private Select<StatusOrdine> statusOrdineSelect = new Select<>();
    private Select<Prodotto> prodottoSelect = new Select<>();
@@ -42,9 +44,10 @@ public class CreaOrdineView extends HorizontalLayout {
    private IntegerField qty = new IntegerField();
    private ArrayList<Prodotto> productList = new ArrayList<>();
 
-   public CreaOrdineView(ClienteService clienteService,NegozioService negozioService) {
+   public CreaOrdineView(ClienteService clienteService,NegozioService negozioService,OrdineService ordineService) {
       this.clienteService = clienteService;
       this.negozioService= negozioService;
+      this.ordineService= ordineService;
       configureGrid();
       add(setComponents(),setProductsGrid());
    }
@@ -57,10 +60,18 @@ public class CreaOrdineView extends HorizontalLayout {
       Button btn = new Button(new Icon(VaadinIcon.PLUS_CIRCLE));
       btn.addClickListener(event -> {
         Prodotto prodotto = prodottoSelect.getValue();
-        prodotto.setQuantita(qty.getValue());
-         productList.add(prodotto);
-         prodottoGrid.setItems(productList);
-         //updateVetrina(prodotto);
+        prodotto.setQuantita(prodotto.getQuantita()-qty.getValue());
+          Prodotto p = null;
+          try {
+              p = prodotto.clone();
+          } catch (CloneNotSupportedException e) {
+              e.printStackTrace();
+          }
+          p.setQuantita(qty.getValue());
+        productList.add(p);
+        prodottoGrid.setItems(productList);
+
+
       });
      prodottoSelect.addToPrefix(btn);
      qty.setHasControls(true);
@@ -69,41 +80,31 @@ public class CreaOrdineView extends HorizontalLayout {
      qty.setValue(1);
      qty.setLabel("Quantità");
      prodottoGrid.setColumns("descrizione.nomeProdotto");
-     prodottoGrid.addColumn(new ComponentRenderer<>(item -> addTextFiled(item))).setHeader("Quantita").setKey("quantita");
+     prodottoGrid.addColumn(new ComponentRenderer<>(item -> addTextField(item))).setHeader("Quantita").setKey("quantita");
      saveButton.addClickListener(event -> createOrder() );
     horizontalLayout.add(prodottoSelect,qty);
      layout.add(horizontalLayout,prodottoGrid,saveButton);
       return layout;
    }
 
-   private void updateVetrina(Prodotto prodotto) {
-      Negozio negozio = negozioSelect.getValue();
 
-      for (int i=0;i<negozio.getVetrina().size();i++){
-          if(negozio.getVetrina().get(i).getId().equals(prodotto.getId())){
-              negozio.getVetrina().get(i).setQuantita(negozio.getVetrina().get(i).getQuantita()-prodotto.getQuantita());
-          }
-      }
-
-      negozioService.save(negozio);
-   }
 
    private void createOrder() {
-      List<Prodotto> list= prodottoGrid.getDataProvider()
-              .fetch(new Query<>())
-              .collect(Collectors.toList());
-      Cliente cliente =  clienteGrid.getSelectionModel().getFirstSelectedItem().get();
-      Ordine ordine = new Ordine(statusOrdineSelect.getValue(),list,puntoRitiro.getValue(),cliente);
-    while (productList.iterator().hasNext()){
-    }
-
+       Negozio negozio = negozioSelect.getValue();
+       negozioService.save(negozio);
+       Cliente cliente =  clienteGrid.getSelectionModel().getFirstSelectedItem().get();
+      Ordine ordine = new Ordine(statusOrdineSelect.getValue(),productList,puntoRitiro.getValue(),cliente);
+       ordineService.save(ordine);
+       Notification notification = new Notification("Ordine creato");
+       notification .setDuration(3000);
+       notification.open();
    }
 
-   private Component addTextFiled(Prodotto item) {
+   private Component addTextField(Prodotto item) {
       IntegerField field = new IntegerField();
-     // field.setEnabled(false);
+      field.setEnabled(false);
       field.setValue(item.getQuantita());
-      field.setHasControls(true);
+      //field.setHasControls(true);
       return field;
    }
 
