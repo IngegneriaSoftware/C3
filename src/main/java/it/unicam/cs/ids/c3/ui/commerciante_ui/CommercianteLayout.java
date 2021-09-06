@@ -25,6 +25,7 @@ public class CommercianteLayout extends AppLayout {
 		addMenuTab("Negozi", NegozioView.class);
 		addMenuTab("Crea Negozio", CreaNegozioView.class);
 		addMenuTab("Crea Ordine", CreaOrdineView.class);
+		addMenuTab("Aggiorna Ordine", AggiornaOrdineView.class);
 		addToNavbar(img,tabs,logout);
 	}
 

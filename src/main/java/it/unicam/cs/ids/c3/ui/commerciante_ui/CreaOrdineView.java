@@ -40,7 +40,7 @@ public class CreaOrdineView extends HorizontalLayout {
    private CommercianteService commercianteService;
    private ProdottoService prodottoService;
    private Negozio negozio;
-   private Select<StatusOrdine> statusOrdineSelect = new Select<>();
+  // private Select<StatusOrdine> statusOrdineSelect = new Select<>();
    private Select<Prodotto> prodottoSelect = new Select<>();
    private TextField puntoRitiro = new TextField();
    private Button saveButton = new Button("Save");
@@ -86,8 +86,8 @@ public class CreaOrdineView extends HorizontalLayout {
      if(prodottoSelect.isEmpty()==false || prodottoSelect.getValue()!=null){qty.setMax(prodottoSelect.getValue().getQuantita());}
      qty.setValue(1);
      qty.setLabel("Quantità");
-     prodottoGrid.setColumns("descrizione.nomeProdotto");
-     prodottoGrid.addColumn(new ComponentRenderer<>(item -> addTextField(item))).setHeader("Quantita").setKey("quantita");
+     prodottoGrid.setColumns("descrizione.nomeProdotto","quantita");
+    // prodottoGrid.addColumn(new ComponentRenderer<>(item -> addTextField(item))).setHeader("Quantita").setKey("quantita");
      saveButton.addClickListener(event -> createOrder() );
     horizontalLayout.add(prodottoSelect,qty);
      layout.add(horizontalLayout,prodottoGrid,saveButton);
@@ -99,7 +99,7 @@ public class CreaOrdineView extends HorizontalLayout {
    private void createOrder() {
        negozioService.save(negozio);
        Cliente cliente =  clienteGrid.getSelectionModel().getFirstSelectedItem().get();
-      Ordine ordine = new Ordine(statusOrdineSelect.getValue(),productList,puntoRitiro.getValue(),cliente);
+      Ordine ordine = new Ordine(StatusOrdine.APERTO,productList,puntoRitiro.getValue(),cliente);
       Iterator<Prodotto>iter = productList.iterator();
        while (iter.hasNext()){
            iter.next().setOrdine(ordine);
@@ -129,10 +129,10 @@ public class CreaOrdineView extends HorizontalLayout {
       filterText.addValueChangeListener(e -> updateList(e.getValue()));
       clienteGrid.setHeight("250px");
       clienteGrid.setWidth("350px");
-      statusOrdineSelect.setLabel("Status Ordine");
-      statusOrdineSelect.setItems(StatusOrdine.values());
+     // statusOrdineSelect.setLabel("Status Ordine");
+     // statusOrdineSelect.setItems(StatusOrdine.values());
       puntoRitiro.setLabel("Punto Ritiro");
-      layout.add(filterText,clienteGrid,statusOrdineSelect,puntoRitiro);
+      layout.add(filterText,clienteGrid,puntoRitiro);
       return layout;
    }
 
