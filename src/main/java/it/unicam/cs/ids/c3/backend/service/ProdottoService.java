@@ -28,6 +28,8 @@ public class ProdottoService {
 
 	public Prodotto save(Prodotto prodotto){return prodottoRepository.save(prodotto);}
 
+	public List<Prodotto> saveAll (List<Prodotto> prodotti){return prodottoRepository.saveAll(prodotti);}
+
 	public Optional<Prodotto> findById(Long id){return prodottoRepository.findById(id);}
 
 

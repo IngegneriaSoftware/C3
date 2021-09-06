@@ -18,6 +18,10 @@ public class Ordine extends AbstractEntity implements Serializable {
     @JoinColumn(name="cliente_id")
     private Cliente cliente;
 
+    @ManyToOne
+    @JoinColumn(name="corriere_id")
+    private Corriere corriere;
+
     public Ordine() {
     }
 
@@ -26,6 +30,7 @@ public class Ordine extends AbstractEntity implements Serializable {
         this.prodotti = prodotti;
         this.puntoRitiro = puntoRitiro;
         this.cliente = cliente;
+        this.corriere= null;
     }
 
     public StatusOrdine getStatus() {
@@ -58,5 +63,20 @@ public class Ordine extends AbstractEntity implements Serializable {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public Corriere getCorriere() {
+        return corriere;
+    }
+
+    public void setCorriere(Corriere corriere) {
+        this.corriere = corriere;
+    }
+
+    @Override
+    public String toString() {
+        return "Ordine{" +
+                "prodotti=" + prodotti.toString() +
+                '}';
     }
 }

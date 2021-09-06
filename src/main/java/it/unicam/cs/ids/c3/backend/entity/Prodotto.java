@@ -68,8 +68,24 @@ public class Prodotto extends AbstractEntity implements Serializable,Cloneable {
 		this.negozio = negozio;
 	}
 
+	public Ordine getOrdine() {
+		return ordine;
+	}
+
+	public void setOrdine(Ordine ordine) {
+		this.ordine = ordine;
+	}
+
 	@Override
 	public Prodotto clone() throws CloneNotSupportedException {
 		return (Prodotto) super.clone();
+	}
+
+	@Override
+	public String toString() {
+		return "Prodotto{" +
+				"descrizione=" + descrizione +
+				", quantita=" + quantita +
+				'}';
 	}
 }

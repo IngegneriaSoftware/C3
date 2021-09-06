@@ -1,6 +1,7 @@
 package it.unicam.cs.ids.c3.backend.service;
 
 import it.unicam.cs.ids.c3.backend.entity.Cliente;
+import it.unicam.cs.ids.c3.backend.entity.Commerciante;
 import it.unicam.cs.ids.c3.backend.entity.Negozio;
 import it.unicam.cs.ids.c3.backend.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,10 @@ public class ClienteService {
         } else {
             return clienteRepository.search(stringFilter);
         }
+    }
+
+    public List<Cliente> search(String searchTerm){
+        return clienteRepository.search(searchTerm);
     }
 
     @PostConstruct

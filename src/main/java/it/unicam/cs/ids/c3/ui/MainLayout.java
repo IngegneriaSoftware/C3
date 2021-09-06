@@ -21,9 +21,11 @@ public class MainLayout extends AppLayout {
 
 
     private void createHeader() {
+        Anchor logout = new Anchor("logout", "Log out");
         Image img = new Image("images/C3-logos_transparent.png","Logo");
         img.addClassName("logo");
-        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), img);
+        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), img,logout);
+
 
         header.setDefaultVerticalComponentAlignment(
                 FlexComponent.Alignment.CENTER);

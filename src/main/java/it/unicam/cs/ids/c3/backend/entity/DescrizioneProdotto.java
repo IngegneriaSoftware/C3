@@ -45,6 +45,11 @@ public class DescrizioneProdotto extends AbstractEntity implements Cloneable{
 	public void setDescrizioneProdotto(String descrizioneProdotto) {
 		this.descrizioneProdotto = descrizioneProdotto;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "DescrizioneProdotto{" +
+				"nomeProdotto='" + nomeProdotto + '\'' +
+				'}';
+	}
 }

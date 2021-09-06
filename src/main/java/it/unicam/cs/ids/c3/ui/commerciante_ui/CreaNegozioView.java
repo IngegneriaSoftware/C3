@@ -22,6 +22,9 @@ import it.unicam.cs.ids.c3.backend.service.DescrizioneProdottoService;
 import it.unicam.cs.ids.c3.backend.service.NegozioService;
 import it.unicam.cs.ids.c3.backend.service.ProdottoService;
 import it.unicam.cs.ids.c3.ui.commerciante_ui.CommercianteLayout;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 import java.util.ArrayList;

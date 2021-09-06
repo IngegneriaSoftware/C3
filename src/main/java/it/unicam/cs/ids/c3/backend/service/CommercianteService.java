@@ -2,6 +2,7 @@ package it.unicam.cs.ids.c3.backend.service;
 
 import java.util.List;
 
+import it.unicam.cs.ids.c3.backend.entity.Negozio;
 import org.springframework.stereotype.Service;
 
 import it.unicam.cs.ids.c3.backend.entity.Commerciante;
@@ -20,6 +21,10 @@ public class CommercianteService {
 
 	public List<Commerciante> findAll(){
 		return commercianteRepository.findAll();
+	}
+
+	public List<Commerciante> search(String searchTerm){
+		return commercianteRepository.search(searchTerm);
 	}
 
 	@PostConstruct

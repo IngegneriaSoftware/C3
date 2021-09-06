@@ -17,60 +17,58 @@ import javax.annotation.PostConstruct;
 @Service
 public class NegozioService {
 
-	private NegozioRepository negozioRepository;
-	private CommercianteRepository commerianteRepository;
-	private ProdottoRepository prodottoRepository;
-	private DescrizioneProdottoRepository descrizioneProdottoRepository;
-    private ProdottoService prodottoService ;
+    private NegozioRepository negozioRepository;
+    private CommercianteRepository commerianteRepository;
+    private ProdottoRepository prodottoRepository;
+    private DescrizioneProdottoRepository descrizioneProdottoRepository;
+    private ProdottoService prodottoService;
 
-	public NegozioService(NegozioRepository negozioRepository, CommercianteRepository commerianteRepository, ProdottoRepository prodottoRepository, DescrizioneProdottoRepository descrizioneProdottoRepository, ProdottoService prodottoService) {
-		this.negozioRepository = negozioRepository;
-		this.commerianteRepository = commerianteRepository;
-		this.prodottoRepository = prodottoRepository;
-		this.descrizioneProdottoRepository = descrizioneProdottoRepository;
-		this.prodottoService = prodottoService;
-	}
-
-
-	public Negozio save(Negozio negozio){return  negozioRepository.save(negozio);}
-
-	public List<Negozio> findAll(){
-		return negozioRepository.findAll();
-	}
-
-	public List<Negozio> findAll(String stringFilter) {
-		if (stringFilter == null || stringFilter.isEmpty()) {
-			return negozioRepository.findAll();
-		} else {
-			return negozioRepository.search(stringFilter);
-		}
-	}
-
-	public List<Negozio> findAll(Categoria categoria){
-		return negozioRepository.searchByCategoria(categoria);
-	}
-
-	public Negozio addNegozio(Negozio negozio){return negozioRepository.save(negozio);}
+    public NegozioService(NegozioRepository negozioRepository, CommercianteRepository commerianteRepository, ProdottoRepository prodottoRepository, DescrizioneProdottoRepository descrizioneProdottoRepository, ProdottoService prodottoService) {
+        this.negozioRepository = negozioRepository;
+        this.commerianteRepository = commerianteRepository;
+        this.prodottoRepository = prodottoRepository;
+        this.descrizioneProdottoRepository = descrizioneProdottoRepository;
+        this.prodottoService = prodottoService;
+    }
 
 
-	public  Negozio getById(Long id){ return negozioRepository.getById(id);}
+    public Negozio save(Negozio negozio) {
+        return negozioRepository.save(negozio);
+    }
 
-	public void addProdotto(Long id, Prodotto prodotto){
-		if (id== null ) {
-			Notification notification = new Notification("Negozio non trovato", 3000);
-					notification.open();
-		}
+    public List<Negozio> findAll() {
+        return negozioRepository.findAll();
+    }
+
+    public List<Negozio> findAll(String stringFilter) {
+        if (stringFilter == null || stringFilter.isEmpty()) {
+            return negozioRepository.findAll();
+        } else {
+            return negozioRepository.search(stringFilter);
+        }
+    }
+
+    public List<Negozio> findAll(Categoria categoria) {
+        return negozioRepository.searchByCategoria(categoria);
+    }
+
+    public Negozio addNegozio(Negozio negozio) {
+        return negozioRepository.save(negozio);
+    }
 
 
-		//negozioRepository.getById(id).getVetrina().add(prodotto);
-		this.getById(id).getVetrina().add(prodotto);
-		System.out.println("qui");
+    public Negozio getById(Long id) {
+        return negozioRepository.getById(id);
+    }
 
-		}
+    public Negozio addProdotto(Negozio negozio, Prodotto prodotto) {
+        negozio.getVetrina().add(prodotto);
+        return save(negozio);
+    }
 
-    public List<Negozio> search(String searchTerm){
-		return negozioRepository.search(searchTerm);
-	}
+    public List<Negozio> search(String searchTerm) {
+        return negozioRepository.search(searchTerm);
+    }
 
 
 
@@ -101,5 +99,5 @@ public class NegozioService {
 
 	//	negozioRepository.save(neg2);
 	}*/
-	
+
 }

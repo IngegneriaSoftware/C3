@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -16,6 +17,7 @@ public class CommercianteLayout extends AppLayout {
 	private Map<Class<? extends Component>, Tab> navigationTargetToTab = new HashMap<>();
 
 	public CommercianteLayout() {
+		Anchor logout = new Anchor("logout", "Log out");
 		Image img = new Image("images/C3-logos_transparent.png","Logo");
 		img.addClickListener(event -> {img.getUI().ifPresent(ui -> ui.navigate(MainView.class));});
 		img.setHeight("50px");
@@ -23,7 +25,7 @@ public class CommercianteLayout extends AppLayout {
 		addMenuTab("Negozi", NegozioView.class);
 		addMenuTab("Crea Negozio", CreaNegozioView.class);
 		addMenuTab("Crea Ordine", CreaOrdineView.class);
-		addToNavbar(img,tabs);
+		addToNavbar(img,tabs,logout);
 	}
 
 	private void addMenuTab(String label, Class<? extends Component> target) {
