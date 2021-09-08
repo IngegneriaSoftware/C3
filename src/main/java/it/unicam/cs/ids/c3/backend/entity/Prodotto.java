@@ -5,6 +5,10 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+/*
+Classe che descrive una specifica istanza di un prodotto che verrà associato ad un negozio
+o ad un ordine
+ */
 @Entity
 public class Prodotto extends AbstractEntity implements Serializable,Cloneable {
 	

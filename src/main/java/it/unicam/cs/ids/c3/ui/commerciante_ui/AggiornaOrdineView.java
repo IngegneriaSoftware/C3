@@ -24,6 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/*
+GUI che mostra un form per l'aggiornamento dei dati di un ordine già creato
+ */
 @Route(value = "aggiornaordine", layout = CommercianteLayout.class)
 @PageTitle("Aggiorna ordine")
 public class AggiornaOrdineView extends HorizontalLayout {
@@ -39,24 +42,25 @@ public class AggiornaOrdineView extends HorizontalLayout {
     private Select<Corriere> corriereSelect = new Select<>();
     private Select<Prodotto> prodottoSelect = new Select<>();
     private ArrayList<Prodotto> productList = new ArrayList<>();
-    private Grid<Prodotto>  prodottoGrid = new Grid<>(Prodotto.class);
+    private Grid<Prodotto> prodottoGrid = new Grid<>(Prodotto.class);
     private IntegerField qty = new IntegerField();
     private Negozio negozio;
     private Button saveButton = new Button("Save");
 
-    public AggiornaOrdineView(OrdineService ordineService, CorriereService corriereService, CommercianteService commercianteService, NegozioService negozioService,ProdottoService prodottoService) {
+    public AggiornaOrdineView(OrdineService ordineService, CorriereService corriereService, CommercianteService commercianteService, NegozioService negozioService, ProdottoService prodottoService) {
         this.ordineService = ordineService;
         this.corriereService = corriereService;
         this.commercianteService = commercianteService;
-        this.prodottoService= prodottoService;
+        this.prodottoService = prodottoService;
         this.negozioService = negozioService;
         configureGrid();
         findNegozio();
-        add(setComponents(),setProductsGrid());
+        add(setComponents(), setProductsGrid());
     }
 
 
-    private VerticalLayout setProductsGrid(){
+    //Setting della griglia e dei componenti per l'aggiunta di ulteriori prodotti
+    private VerticalLayout setProductsGrid() {
         VerticalLayout layout = new VerticalLayout();
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         prodottoSelect.setLabel("Prodotti");
@@ -65,7 +69,7 @@ public class AggiornaOrdineView extends HorizontalLayout {
         Button btn = new Button(new Icon(VaadinIcon.PLUS_CIRCLE));
         btn.addClickListener(event -> {
             Prodotto prodotto = prodottoSelect.getValue();
-            prodotto.setQuantita(prodotto.getQuantita()-qty.getValue());
+            prodotto.setQuantita(prodotto.getQuantita() - qty.getValue());
             Prodotto p = null;
             try {
                 p = prodotto.clone();
@@ -81,34 +85,38 @@ public class AggiornaOrdineView extends HorizontalLayout {
         prodottoSelect.addToPrefix(btn);
         qty.setHasControls(true);
         qty.setMin(1);
-        if(prodottoSelect.isEmpty()==false || prodottoSelect.getValue()!=null){qty.setMax(prodottoSelect.getValue().getQuantita());}
+        if (prodottoSelect.isEmpty() == false || prodottoSelect.getValue() != null) {
+            qty.setMax(prodottoSelect.getValue().getQuantita());
+        }
         qty.setValue(1);
         qty.setLabel("Quantità");
-        prodottoGrid.setColumns("descrizione.nomeProdotto","quantita");
-        saveButton.addClickListener(event -> modifyOrder() );
-        horizontalLayout.add(prodottoSelect,qty);
-        layout.add(horizontalLayout,prodottoGrid,saveButton);
+        prodottoGrid.setColumns("descrizione.nomeProdotto", "quantita");
+        saveButton.addClickListener(event -> modifyOrder());
+        horizontalLayout.add(prodottoSelect, qty);
+        layout.add(horizontalLayout, prodottoGrid, saveButton);
         return layout;
     }
 
+    //Registra le modiche effettuate
     private void modifyOrder() {
-        Ordine ordine =  ordineGrid.getSelectionModel().getFirstSelectedItem().get();
+        Ordine ordine = ordineGrid.getSelectionModel().getFirstSelectedItem().get();
         ordine.setStatus(statusOrdineSelect.getValue());
         ordine.setCorriere(corriereSelect.getValue());
         productList.addAll(ordine.getProdotti());
         ordine.setProdotti(productList);
         Iterator<Prodotto> iter = productList.iterator();
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             iter.next().setOrdine(ordine);
         }
         ordineService.save(ordine);
         prodottoService.saveAll(productList);
         Notification notification = new Notification("Ordine modificato");
-        notification .setDuration(3000);
+        notification.setDuration(3000);
         notification.open();
     }
 
-    private VerticalLayout setComponents(){
+    //Setting dei componenti della GUI
+    private VerticalLayout setComponents() {
         VerticalLayout layout = new VerticalLayout();
         filterText.setLabel("Cliente");
         filterText.setSuffixComponent(new Icon(VaadinIcon.SEARCH));
@@ -126,22 +134,25 @@ public class AggiornaOrdineView extends HorizontalLayout {
                 .collect(Collectors.toList());
         corriereSelect.setItemLabelGenerator(Corriere::getNomeCorriere);
         corriereSelect.setItems(corrieriDisponibili);
-        layout.add(filterText,ordineGrid,statusOrdineSelect,corriereSelect);
+        layout.add(filterText, ordineGrid, statusOrdineSelect, corriereSelect);
         return layout;
     }
 
+    //Aggiorna la lista degli ordini mostrati in griglia
     private void updateList(String value) {
         ordineGrid.setItems(ordineService.findAll(value));
     }
 
-    private void configureGrid(){
-        ordineGrid.setColumns("cliente.nomeCliente","status");
+    //Configura la griglia
+    private void configureGrid() {
+        ordineGrid.setColumns("cliente.nomeCliente", "status");
         ordineGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
                 GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
         ordineGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
     }
 
-    private void findNegozio(){
+    //Ritorna il negozio associato al commerciante che sta effettuando le modifiche
+    private void findNegozio() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = null;
         if (principal instanceof UserDetails) {

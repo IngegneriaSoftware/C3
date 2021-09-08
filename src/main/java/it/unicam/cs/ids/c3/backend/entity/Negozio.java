@@ -10,6 +10,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+/*
+Classe che descrive un negozio associato ad un commerciante
+ */
 @Entity
 public class Negozio extends AbstractEntity implements Serializable {
 

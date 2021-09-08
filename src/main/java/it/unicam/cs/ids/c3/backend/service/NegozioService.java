@@ -14,6 +14,9 @@ import it.unicam.cs.ids.c3.backend.repository.NegozioRepository;
 
 import javax.annotation.PostConstruct;
 
+/*
+Classe service che effettua operazioni nel database per l'entita negozio
+ */
 @Service
 public class NegozioService {
 
@@ -31,15 +34,17 @@ public class NegozioService {
         this.prodottoService = prodottoService;
     }
 
-
+    //Salva un negozio nel db
     public Negozio save(Negozio negozio) {
         return negozioRepository.save(negozio);
     }
 
+    //Restituisce tutti i negozi nel db
     public List<Negozio> findAll() {
         return negozioRepository.findAll();
     }
 
+    //Restituisce tutti i negozi nel db in base a una stringa di ricerca
     public List<Negozio> findAll(String stringFilter) {
         if (stringFilter == null || stringFilter.isEmpty()) {
             return negozioRepository.findAll();
@@ -48,6 +53,7 @@ public class NegozioService {
         }
     }
 
+    //Restituisce tutti i negozi nel db appartenenti ad una determinata categoria
     public List<Negozio> findAll(Categoria categoria) {
         return negozioRepository.searchByCategoria(categoria);
     }
@@ -57,47 +63,21 @@ public class NegozioService {
     }
 
 
+    //Ricerca un negozio per il suo ID
     public Negozio getById(Long id) {
         return negozioRepository.getById(id);
     }
 
+    //Aggiunge un prodotto nella vetrina del negozio
     public Negozio addProdotto(Negozio negozio, Prodotto prodotto) {
         negozio.getVetrina().add(prodotto);
         return save(negozio);
     }
 
+    //Ricerca negozi in base ad una stringa di ricerca
     public List<Negozio> search(String searchTerm) {
         return negozioRepository.search(searchTerm);
     }
 
-
-
-/*	@PostConstruct
-	public void populateTestData() {
-            negozioRepository.deleteAll();
-		DescrizioneProdotto descrizioneProdotto = new DescrizioneProdotto("0014","Articolo 4","Articolo 4");
-		descrizioneProdottoRepository.save(descrizioneProdotto);
-		Commerciante comm1 = new Commerciante("Mario Rossi","86334519757");
-		commerianteRepository.save(comm1);
-		Prodotto prodotto = new Prodotto(descrizioneProdotto,1);
-		prodottoRepository.save(prodotto);
-		LinkedList<Prodotto> list = new LinkedList();
-		list.add(prodotto);
-		Negozio neg1 = new Negozio("Da Rossi","Via Garibaldi 12",list,comm1);
-		//prodotto.setNegozio(neg1);
-		prodottoService.findById(prodotto.getId()).get().setNegozio(neg1);
-		prodottoService.save(prodottoService.findById(prodotto.getId()).get());
-		negozioRepository.save(neg1);
-
-
-
-
-		//Commerciante comm2 = new Commerciante("Luigi Bianchi","123456789");
-		//Negozio neg2  = new Negozio("Da Bianchi","Via Garibaldi, 13",list,comm2);
-
-	//	commerianteRepository.save(comm2);
-
-	//	negozioRepository.save(neg2);
-	}*/
 
 }

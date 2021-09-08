@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+/*
+Classe che descrive un ordine associato ad un cliente
+ */
 @Entity
 public class Ordine extends AbstractEntity implements Serializable {
 

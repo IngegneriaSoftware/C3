@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+/*
+Classe service che effettua operazioni nel database per l'entita corriere
+ */
 @Service
 public class CorriereService {
 
@@ -19,17 +22,24 @@ public class CorriereService {
         this.corriereRepository = corriereRepository;
     }
 
-    public List<Corriere> findAll(){return corriereRepository.findAll();}
+    //Restituisce tutti i corrieri presenti nel db
+    public List<Corriere> findAll() {
+        return corriereRepository.findAll();
+    }
 
-    public Corriere save(Corriere corriere){return corriereRepository.save(corriere);}
+    //Salva un corriere nel db
+    public Corriere save(Corriere corriere) {
+        return corriereRepository.save(corriere);
+    }
 
-    public List<Corriere> search(String searchTerm){
+    //Ricerca corrieri secondo una stringa di ricerca
+    public List<Corriere> search(String searchTerm) {
         return corriereRepository.search(searchTerm);
     }
 
     @PostConstruct
     public void populateTestData() {
-       Corriere corriere = new Corriere("Luca Verdi", StausCorriere.DISPONIBILE);
+        Corriere corriere = new Corriere("Luca Verdi", StausCorriere.DISPONIBILE);
         corriereRepository.save(corriere);
     }
 }

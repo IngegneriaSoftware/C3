@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+/*
+Classe che descrive un tipo di prodotto
+ */
 @Entity
 public class DescrizioneProdotto extends AbstractEntity implements Cloneable{
 	

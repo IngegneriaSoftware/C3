@@ -7,12 +7,13 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
-import it.unicam.cs.ids.c3.ui.MainView;
-import it.unicam.cs.ids.c3.ui.commerciante_ui.DescrizioneProdottoView;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+Menubar dellE GUI del corriere
+ */
 public class CorriereLayout extends AppLayout {
 
     private Tabs tabs = new Tabs();
@@ -20,11 +21,10 @@ public class CorriereLayout extends AppLayout {
 
     public CorriereLayout() {
         Anchor logout = new Anchor("logout", "Log out");
-        Image img = new Image("images/C3-logos_transparent.png","Logo");
-        img.addClickListener(event -> {img.getUI().ifPresent(ui -> ui.navigate(MainView.class));});
+        Image img = new Image("images/C3-logos_transparent.png", "Logo");
         img.setHeight("50px");
         addMenuTab("Aggiorna disponibilita", StatusView.class);
-        addToNavbar(img,tabs,logout);
+        addToNavbar(img, tabs, logout);
     }
 
     private void addMenuTab(String label, Class<? extends Component> target) {

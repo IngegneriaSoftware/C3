@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+/*
+Classe che descrive l'attore commerciante
+ */
 @Entity
 public class Commerciante extends AbstractEntity implements Cloneable {
 

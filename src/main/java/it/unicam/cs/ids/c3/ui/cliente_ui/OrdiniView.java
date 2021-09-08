@@ -25,6 +25,9 @@ import org.w3c.dom.stylesheets.LinkStyle;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/*
+GUI che mostra gli ordini associati ad un cliente
+ */
 @Route(value = "ordini", layout = ClienteLayout.class)
 @PageTitle("Ordini")
 public class OrdiniView extends VerticalLayout {
@@ -34,7 +37,7 @@ public class OrdiniView extends VerticalLayout {
     private ClienteService clienteService;
     private List<Ordine> ordineList;
 
-    public OrdiniView(OrdineService ordineService,ClienteService clienteService) {
+    public OrdiniView(OrdineService ordineService, ClienteService clienteService) {
         this.ordineService = ordineService;
         this.clienteService = clienteService;
         findOrdini();
@@ -43,25 +46,27 @@ public class OrdiniView extends VerticalLayout {
         add(grid);
     }
 
+    //Configura le colonne della griglia
     private void configureGrid() {
-        /*grid.addClassName("ordini-grid");
-        grid.setSizeFull();*/
-        grid.setColumns("status","puntoRitiro");
+
+        grid.setColumns("status", "puntoRitiro");
         grid.addColumn(new ComponentRenderer<>(ordine -> showProdotti(ordine)));
     }
 
+    //Mostra i prodotti contenuti nell'ordine
     private Component showProdotti(Ordine ordine) {
-        String text="";
-       for(int i=0;i<ordine.getProdotti().size();i++){
-           text = text +ordine.getProdotti().get(i).getDescrizione().getNomeProdotto()+" ";
-           text = text +"n." + ordine.getProdotti().get(i).getQuantita();
-           text = text + "\n";
-       }
+        String text = "";
+        for (int i = 0; i < ordine.getProdotti().size(); i++) {
+            text = text + ordine.getProdotti().get(i).getDescrizione().getNomeProdotto() + " ";
+            text = text + "n." + ordine.getProdotti().get(i).getQuantita();
+            text = text + "\n";
+        }
         Details component = new Details("Prodotti", new Text(text));
         return component;
     }
 
-    private void findOrdini(){
+    //Cerca gli ordini associati al cliente
+    private void findOrdini() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = null;
         if (principal instanceof UserDetails) {

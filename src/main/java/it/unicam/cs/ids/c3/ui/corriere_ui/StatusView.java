@@ -14,15 +14,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
-
+/*
+GUI che permette di aggiornare lo status di disponibilita del corriere
+ */
 @Route(value = "status", layout = CorriereLayout.class)
 @PageTitle("Aggiorna Disponibilita")
 public class StatusView extends VerticalLayout {
 
     RadioButtonGroup<StausCorriere> radioGroup = new RadioButtonGroup<>();
     CorriereService corriereService;
+
     public StatusView(CorriereService corriereService) {
-       this.corriereService=corriereService;
+        this.corriereService = corriereService;
         radioGroup.setLabel("Status");
         radioGroup.setItems(StausCorriere.values());
         radioGroup.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
@@ -31,6 +34,7 @@ public class StatusView extends VerticalLayout {
 
     }
 
+    //Registra le modifiche dello status
     private void changeStatus(StausCorriere value) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = null;

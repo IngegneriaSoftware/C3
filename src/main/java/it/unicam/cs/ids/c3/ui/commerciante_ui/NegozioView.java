@@ -24,6 +24,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
+/*
+GUI che mostra i prodotti venduti da un negozio e ne permette di
+aggiungerne altri
+ */
 @Route(value = "negozio", layout = CommercianteLayout.class)
 @PageTitle("Negozio")
 public class NegozioView extends VerticalLayout {
@@ -51,6 +55,7 @@ public class NegozioView extends VerticalLayout {
         add(horizontalLayout, grid);
     }
 
+    //Trova il negozio associato al commerciante e ne mostra i prodotti in griglia
     private void showNegozio() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = null;
@@ -73,16 +78,17 @@ public class NegozioView extends VerticalLayout {
         }
     }
 
+    //Aggiorna la lista dei prodotti mostrati in griglia
     private void updateList() {
         Prodotto prodotto = new Prodotto(prodottiSelect.getValue(), qty.getValue());
-       prodotto.setNegozio(negozio);
-       negozioService.addProdotto(negozio,prodotto);
+        prodotto.setNegozio(negozio);
+        negozioService.addProdotto(negozio, prodotto);
         showNegozio();
 
     }
 
 
-
+    //Setting dei componenti della GUI
     private void setComponents() {
         prodottiSelect.setLabel("Prodotti");
         prodottiSelect.setItemLabelGenerator(DescrizioneProdotto::getNomeProdotto);

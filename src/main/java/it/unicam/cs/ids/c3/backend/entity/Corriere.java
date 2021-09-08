@@ -2,6 +2,9 @@ package it.unicam.cs.ids.c3.backend.entity;
 
 import javax.persistence.Entity;
 
+/*
+Classe che descrive l'attore corriere
+ */
 @Entity
 public class Corriere extends AbstractEntity{
 
