@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.c3.ui;
+package it.unicam.cs.ids.c3.ui.commerciante_ui;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -7,6 +7,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -20,13 +21,20 @@ import it.unicam.cs.ids.c3.backend.service.CommercianteService;
 import it.unicam.cs.ids.c3.backend.service.DescrizioneProdottoService;
 import it.unicam.cs.ids.c3.backend.service.NegozioService;
 import it.unicam.cs.ids.c3.backend.service.ProdottoService;
+import it.unicam.cs.ids.c3.ui.commerciante_ui.CommercianteLayout;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 import java.util.ArrayList;
 
-@Route(value = "negozioform", layout = CommercianteLayout.class)
+/*
+GUI che mostra un form per la creazione di un negozio
+ */
+@Route(value = "creanegozio", layout = CommercianteLayout.class)
 @PageTitle("Crea negozio")
-public class NegozioFormView extends HorizontalLayout {
+public class CreaNegozioView extends HorizontalLayout {
 
     private ArrayList<DescrizioneProdotto> productsDescriptions = new ArrayList<>();
     private ArrayList<Prodotto> products = new ArrayList<>();
@@ -43,25 +51,28 @@ public class NegozioFormView extends HorizontalLayout {
     private DescrizioneProdottoService descrizioneProdottoService;
     private NegozioService negozioService;
 
-    public NegozioFormView(CommercianteService commercianteService, ProdottoService prodottoService, DescrizioneProdottoService descrizioneProdottoService,NegozioService negozioService) {
+
+    public CreaNegozioView(CommercianteService commercianteService, ProdottoService prodottoService, DescrizioneProdottoService descrizioneProdottoService, NegozioService negozioService) {
         this.commercianteService = commercianteService;
         this.prodottoService = prodottoService;
         this.descrizioneProdottoService = descrizioneProdottoService;
-        this.negozioService= negozioService;
+        this.negozioService = negozioService;
         addProductButton.addClickListener(e -> addToGrid());
         saveButton.addClickListener(e -> createNegozio());
         this.setSpacing(false);
         add(setComponents(), configureGrid());
     }
 
+    //Cambia la quantita dell' IntegerField
     private void changeQty(int qty) {
         prodotti.getSelectionModel().getFirstSelectedItem().get().setQuantita(qty);
     }
 
+    //Crea e salva il negozio nel db
     private void createNegozio() {
         Negozio negozio = new Negozio();
-        negozioService.save(negozio);
-        for(int  i=0;i<products.size();i++){
+        negozioService.addNegozio(negozio);
+        for (int i = 0; i < products.size(); i++) {
             products.get(i).setNegozio(negozio);
             prodottoService.save(products.get(i));
         }
@@ -70,10 +81,13 @@ public class NegozioFormView extends HorizontalLayout {
         negozio.setIndirizzo(indirizzo.getValue());
         negozio.setCategoria(categoriaSelect.getValue());
         negozio.setVetrina(products);
-        negozioService.save(negozio);
-
+        negozioService.addNegozio(negozio);
+        Notification notification = new Notification("Negozio creato");
+        notification.setDuration(3000);
+        notification.open();
     }
 
+    //Mostra i prodotti nella griglia
     private void addToGrid() {
         productsDescriptions.add(prodottoSelect.getValue());
         products.add(new Prodotto(prodottoSelect.getValue(), 1));
@@ -81,6 +95,7 @@ public class NegozioFormView extends HorizontalLayout {
         prodotti.getDataProvider().refreshAll();
     }
 
+    //Setting dei componenti nella griglia
     private VerticalLayout setComponents() {
         H2 title = new H2("Crea negozio");
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -94,10 +109,11 @@ public class NegozioFormView extends HorizontalLayout {
         categoriaSelect.setLabel("Categoria");
         categoriaSelect.setItems(Categoria.values());
         VerticalLayout layout = new VerticalLayout();
-        layout.add(title, nome, indirizzo,categoriaSelect, commercianteSelect);
+        layout.add(title, nome, indirizzo, categoriaSelect, commercianteSelect);
         return layout;
     }
 
+    //Configura la griglia
     private VerticalLayout configureGrid() {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.add(prodottoSelect, addProductButton);
@@ -115,6 +131,7 @@ public class NegozioFormView extends HorizontalLayout {
         return layout;
     }
 
+    //Aggiunge un componente IntegerFiled nella colonna quantita della griglia
     private Component addIntField() {
         IntegerField field = new IntegerField();
         field.setHasControls(true);

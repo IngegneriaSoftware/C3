@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.c3.ui;
+package it.unicam.cs.ids.c3.ui.cliente_ui;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
@@ -13,7 +13,11 @@ import com.vaadin.flow.router.Route;
 import it.unicam.cs.ids.c3.backend.entity.Categoria;
 import it.unicam.cs.ids.c3.backend.entity.Negozio;
 import it.unicam.cs.ids.c3.backend.service.NegozioService;
+import it.unicam.cs.ids.c3.ui.cliente_ui.ClienteLayout;
 
+/*
+GUI per la ricerca di punti vendita
+ */
 @Route(value = "puntivendita", layout = ClienteLayout.class)
 @PageTitle("Mostra punti vendita")
 public class MostraPuntiVenditaView extends VerticalLayout {
@@ -25,9 +29,10 @@ public class MostraPuntiVenditaView extends VerticalLayout {
 
     public MostraPuntiVenditaView(NegozioService negozioService) {
         this.negozioService = negozioService;
-        add(setComponents(),configureGrid());
+        add(setComponents(), configureGrid());
     }
 
+    //Setting dei componenti della GUI
     private HorizontalLayout setComponents() {
         HorizontalLayout layout = new HorizontalLayout();
         layout.setAlignItems(Alignment.BASELINE);
@@ -44,18 +49,19 @@ public class MostraPuntiVenditaView extends VerticalLayout {
         return layout;
     }
 
+    //Configura le colonne della griglia
     private Grid<Negozio> configureGrid() {
-       // negozioGrid.addClassName("negozio-grid");
-       // negozioGrid.setSizeFull();
-        negozioGrid.setColumns("nomeNegozio", "indirizzo","categoria");
+        negozioGrid.setColumns("nomeNegozio", "indirizzo", "categoria");
         return negozioGrid;
     }
 
+    //Aggiorna gli elementi mostrati nella griglia filtrandoli per nome
     private void updateList(String stringFilter) {
         negozioGrid.setItems(negozioService.findAll(stringFilter));
     }
 
+    //Aggiorna gli elementi mostrati nella griglia filtrandoli per categoria
     private void updateList(Categoria categoria) {
-       negozioGrid.setItems(negozioService.findAll(categoria));
+        negozioGrid.setItems(negozioService.findAll(categoria));
     }
 }

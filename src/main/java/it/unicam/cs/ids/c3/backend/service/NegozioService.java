@@ -14,89 +14,70 @@ import it.unicam.cs.ids.c3.backend.repository.NegozioRepository;
 
 import javax.annotation.PostConstruct;
 
+/*
+Classe service che effettua operazioni nel database per l'entita negozio
+ */
 @Service
 public class NegozioService {
 
-	private NegozioRepository negozioRepository;
-	private CommercianteRepository commerianteRepository;
-	private ProdottoRepository prodottoRepository;
-	private DescrizioneProdottoRepository descrizioneProdottoRepository;
-    private ProdottoService prodottoService ;
+    private NegozioRepository negozioRepository;
+    private CommercianteRepository commerianteRepository;
+    private ProdottoRepository prodottoRepository;
+    private DescrizioneProdottoRepository descrizioneProdottoRepository;
+    private ProdottoService prodottoService;
 
-	public NegozioService(NegozioRepository negozioRepository, CommercianteRepository commerianteRepository, ProdottoRepository prodottoRepository, DescrizioneProdottoRepository descrizioneProdottoRepository, ProdottoService prodottoService) {
-		this.negozioRepository = negozioRepository;
-		this.commerianteRepository = commerianteRepository;
-		this.prodottoRepository = prodottoRepository;
-		this.descrizioneProdottoRepository = descrizioneProdottoRepository;
-		this.prodottoService = prodottoService;
-	}
+    public NegozioService(NegozioRepository negozioRepository, CommercianteRepository commerianteRepository, ProdottoRepository prodottoRepository, DescrizioneProdottoRepository descrizioneProdottoRepository, ProdottoService prodottoService) {
+        this.negozioRepository = negozioRepository;
+        this.commerianteRepository = commerianteRepository;
+        this.prodottoRepository = prodottoRepository;
+        this.descrizioneProdottoRepository = descrizioneProdottoRepository;
+        this.prodottoService = prodottoService;
+    }
 
-	public List<Negozio> findAll(){
-		return negozioRepository.findAll();
-	}
+    //Salva un negozio nel db
+    public Negozio save(Negozio negozio) {
+        return negozioRepository.save(negozio);
+    }
 
-	public List<Negozio> findAll(String stringFilter) {
-		if (stringFilter == null || stringFilter.isEmpty()) {
-			return negozioRepository.findAll();
-		} else {
-			return negozioRepository.search(stringFilter);
-		}
-	}
+    //Restituisce tutti i negozi nel db
+    public List<Negozio> findAll() {
+        return negozioRepository.findAll();
+    }
 
-	public List<Negozio> findAll(Categoria categoria){
-		return negozioRepository.searchByCategoria(categoria);
-	}
+    //Restituisce tutti i negozi nel db in base a una stringa di ricerca
+    public List<Negozio> findAll(String stringFilter) {
+        if (stringFilter == null || stringFilter.isEmpty()) {
+            return negozioRepository.findAll();
+        } else {
+            return negozioRepository.search(stringFilter);
+        }
+    }
 
-	public Negozio save(Negozio negozio){return negozioRepository.save(negozio);}
+    //Restituisce tutti i negozi nel db appartenenti ad una determinata categoria
+    public List<Negozio> findAll(Categoria categoria) {
+        return negozioRepository.searchByCategoria(categoria);
+    }
 
-
-	public  Negozio getById(Long id){ return negozioRepository.getById(id);}
-
-	public void addProduct(Long id, Prodotto prodotto){
-		if (id== null ) {
-			Notification notification = new Notification("Negozio non trovato", 3000);
-					notification.open();
-		}
-
-
-		//negozioRepository.getById(id).getVetrina().add(prodotto);
-		this.getById(id).getVetrina().add(prodotto);
-		System.out.println("qui");
-
-		}
-
-    public List<Negozio> search(String searchTerm){
-		return negozioRepository.search(searchTerm);
-	}
+    public Negozio addNegozio(Negozio negozio) {
+        return negozioRepository.save(negozio);
+    }
 
 
+    //Ricerca un negozio per il suo ID
+    public Negozio getById(Long id) {
+        return negozioRepository.getById(id);
+    }
 
-/*	@PostConstruct
-	public void populateTestData() {
-            negozioRepository.deleteAll();
-		DescrizioneProdotto descrizioneProdotto = new DescrizioneProdotto("0014","Articolo 4","Articolo 4");
-		descrizioneProdottoRepository.save(descrizioneProdotto);
-		Commerciante comm1 = new Commerciante("Mario Rossi","86334519757");
-		commerianteRepository.save(comm1);
-		Prodotto prodotto = new Prodotto(descrizioneProdotto,1);
-		prodottoRepository.save(prodotto);
-		LinkedList<Prodotto> list = new LinkedList();
-		list.add(prodotto);
-		Negozio neg1 = new Negozio("Da Rossi","Via Garibaldi 12",list,comm1);
-		//prodotto.setNegozio(neg1);
-		prodottoService.findById(prodotto.getId()).get().setNegozio(neg1);
-		prodottoService.save(prodottoService.findById(prodotto.getId()).get());
-		negozioRepository.save(neg1);
+    //Aggiunge un prodotto nella vetrina del negozio
+    public Negozio addProdotto(Negozio negozio, Prodotto prodotto) {
+        negozio.getVetrina().add(prodotto);
+        return save(negozio);
+    }
+
+    //Ricerca negozi in base ad una stringa di ricerca
+    public List<Negozio> search(String searchTerm) {
+        return negozioRepository.search(searchTerm);
+    }
 
 
-
-
-		//Commerciante comm2 = new Commerciante("Luigi Bianchi","123456789");
-		//Negozio neg2  = new Negozio("Da Bianchi","Via Garibaldi, 13",list,comm2);
-
-	//	commerianteRepository.save(comm2);
-
-	//	negozioRepository.save(neg2);
-	}*/
-	
 }

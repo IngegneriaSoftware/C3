@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.c3.ui;
+package it.unicam.cs.ids.c3.ui.commerciante_ui;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -11,25 +11,32 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import it.unicam.cs.ids.c3.backend.entity.Commerciante;
 import it.unicam.cs.ids.c3.backend.entity.DescrizioneProdotto;
 import it.unicam.cs.ids.c3.backend.entity.Negozio;
 import it.unicam.cs.ids.c3.backend.entity.Prodotto;
 import it.unicam.cs.ids.c3.backend.service.CommercianteService;
 import it.unicam.cs.ids.c3.backend.service.DescrizioneProdottoService;
 import it.unicam.cs.ids.c3.backend.service.NegozioService;
+import it.unicam.cs.ids.c3.ui.commerciante_ui.CommercianteLayout;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
-@Route(value="negozio", layout = CommercianteLayout.class)
+/*
+GUI che mostra i prodotti venduti da un negozio e ne permette di
+aggiungerne altri
+ */
+@Route(value = "negozio", layout = CommercianteLayout.class)
 @PageTitle("Negozio")
 public class NegozioView extends VerticalLayout {
     NegozioService negozioService;
     CommercianteService commercianteService;
     DescrizioneProdottoService descrizioneProdottoService;
+    Negozio negozio;
     private Grid<Prodotto> grid = new Grid<>(Prodotto.class);
-    private Select<Negozio> negozioSelect = new Select<>();
     private Select<DescrizioneProdotto> prodottiSelect = new Select<>();
-    private Button searchButton = new Button(new Icon(VaadinIcon.SEARCH));
     private Button addProductButton = new Button(new Icon(VaadinIcon.PLUS_CIRCLE));
     private IntegerField qty = new IntegerField();
 
@@ -39,36 +46,50 @@ public class NegozioView extends VerticalLayout {
         this.descrizioneProdottoService = descrizioneProdottoService;
         addClassName("list-view");
         setSizeFull();
-        HorizontalLayout horizontalLayout = new HorizontalLayout(negozioSelect, searchButton,prodottiSelect,addProductButton,qty);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(prodottiSelect, addProductButton, qty);
         horizontalLayout.setAlignItems(Alignment.BASELINE);
-        searchButton.addClickListener(e -> showNegozio(negozioSelect.getValue()));
-        addProductButton.addClickListener(e->addToGrid());
+        addProductButton.addClickListener(e -> updateList());
         setComponents();
         configureGrid();
-        add(horizontalLayout,grid);
-       // updateList();
+        showNegozio();
+        add(horizontalLayout, grid);
     }
 
-    private void showNegozio(Negozio negozio) {
-       // negozioService.getById(value.getId());
-        if(negozio.getVetrina()!=null){
-        updateList(negozio.getVetrina());
-        }else{Notification notification = new Notification("Vetrina vuota", 3000);
-            notification.open();}
+    //Trova il negozio associato al commerciante e ne mostra i prodotti in griglia
+    private void showNegozio() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = null;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        Commerciante commerciante = commercianteService.search(username).get(0);
+        String finalUsername = username;
+        negozio = negozioService.findAll().stream()
+                .filter(n -> n.getCommerciante().getNomeCommerciante().equals(finalUsername))
+                .findAny().orElse(null);
+        if (negozio != null) {
+            grid.setItems(negozio.getVetrina());
+        } else {
+            Notification n = new Notification("Nessun negozio associato al tuo account");
+            n.setDuration(4000);
+            n.open();
+        }
     }
 
-    private void updateList(List<Prodotto> list) {grid.setItems(list); }
+    //Aggiorna la lista dei prodotti mostrati in griglia
+    private void updateList() {
+        Prodotto prodotto = new Prodotto(prodottiSelect.getValue(), qty.getValue());
+        prodotto.setNegozio(negozio);
+        negozioService.addProdotto(negozio, prodotto);
+        showNegozio();
 
-    private void addToGrid() {
-       Prodotto prodotto = new Prodotto(prodottiSelect.getValue(),qty.getValue());
-        negozioSelect.getValue().getVetrina().add(prodotto);
-       showNegozio(negozioSelect.getValue());
     }
 
-    private void setComponents(){
-        negozioSelect.setLabel("Negozio");
-        negozioSelect.setItemLabelGenerator(Negozio::getNomeNegozio);
-        negozioSelect.setItems(negozioService.findAll());
+
+    //Setting dei componenti della GUI
+    private void setComponents() {
         prodottiSelect.setLabel("Prodotti");
         prodottiSelect.setItemLabelGenerator(DescrizioneProdotto::getNomeProdotto);
         prodottiSelect.setItems(descrizioneProdottoService.findAll());
@@ -78,10 +99,9 @@ public class NegozioView extends VerticalLayout {
     }
 
 
-
     private void configureGrid() {
         grid.addClassName("vetrina-grid");
         grid.setSizeFull();
-        grid.setColumns("descrizione.codiceProdotto", "descrizione.nomeProdotto", "descrizione.descrizioneProdotto","quantita");
+        grid.setColumns("descrizione.codiceProdotto", "descrizione.nomeProdotto", "descrizione.descrizioneProdotto", "quantita");
     }
 }

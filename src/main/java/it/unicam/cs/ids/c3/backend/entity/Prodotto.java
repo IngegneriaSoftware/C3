@@ -5,13 +5,21 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+/*
+Classe che descrive una specifica istanza di un prodotto che verrà associato ad un negozio
+o ad un ordine
+ */
 @Entity
-public class Prodotto extends AbstractEntity implements Serializable {
+public class Prodotto extends AbstractEntity implements Serializable,Cloneable {
 	
 
 	 @ManyToOne
 	  @JoinColumn(name="descrizioneProdotto_id")
 	  private DescrizioneProdotto descrizione;
+
+	@ManyToOne
+	@JoinColumn(name="ordine_id")
+	 private Ordine ordine;
 
 	  private int quantita;
 	 
@@ -62,5 +70,26 @@ public class Prodotto extends AbstractEntity implements Serializable {
 
 	public void setNegozio(Negozio negozio) {
 		this.negozio = negozio;
+	}
+
+	public Ordine getOrdine() {
+		return ordine;
+	}
+
+	public void setOrdine(Ordine ordine) {
+		this.ordine = ordine;
+	}
+
+	@Override
+	public Prodotto clone() throws CloneNotSupportedException {
+		return (Prodotto) super.clone();
+	}
+
+	@Override
+	public String toString() {
+		return "Prodotto{" +
+				"descrizione=" + descrizione +
+				", quantita=" + quantita +
+				'}';
 	}
 }

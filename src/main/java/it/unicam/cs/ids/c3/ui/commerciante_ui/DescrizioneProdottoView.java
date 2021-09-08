@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.c3.ui;
+package it.unicam.cs.ids.c3.ui.commerciante_ui;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -6,7 +6,11 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import it.unicam.cs.ids.c3.backend.entity.DescrizioneProdotto;
 import it.unicam.cs.ids.c3.backend.service.DescrizioneProdottoService;
+import it.unicam.cs.ids.c3.ui.commerciante_ui.CommercianteLayout;
 
+/*
+GUI che mostra le descrizioni prodotto presenti nel sistema
+ */
 @Route(value="prodotti", layout = CommercianteLayout.class)
 @PageTitle("Prodotti")
 public class DescrizioneProdottoView extends VerticalLayout{

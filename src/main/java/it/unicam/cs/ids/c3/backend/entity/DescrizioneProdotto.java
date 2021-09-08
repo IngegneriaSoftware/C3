@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+/*
+Classe che descrive un tipo di prodotto
+ */
 @Entity
 public class DescrizioneProdotto extends AbstractEntity implements Cloneable{
 	
@@ -45,6 +48,11 @@ public class DescrizioneProdotto extends AbstractEntity implements Cloneable{
 	public void setDescrizioneProdotto(String descrizioneProdotto) {
 		this.descrizioneProdotto = descrizioneProdotto;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "DescrizioneProdotto{" +
+				"nomeProdotto='" + nomeProdotto + '\'' +
+				'}';
+	}
 }
