@@ -66,7 +66,13 @@ public class CreaOrdineView extends HorizontalLayout {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         prodottoSelect.setLabel("Prodotti");
         prodottoSelect.setItemLabelGenerator(Prodotto::getNomeProdotto);
-        prodottoSelect.setItems(negozio.getVetrina());
+        if (negozio != null) {
+            prodottoSelect.setItems(negozio.getVetrina());
+        } else {
+            Notification notification = new Notification("Crea un negozio prima!");
+            notification.setDuration(3000);
+            notification.open();
+        }
         Button btn = new Button(new Icon(VaadinIcon.PLUS_CIRCLE));
         btn.addClickListener(event -> {
             Prodotto prodotto = prodottoSelect.getValue();
