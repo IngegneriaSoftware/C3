@@ -81,22 +81,15 @@ Main frameworks:
 
 Setting up the project locally:
 
-### Prerequisites
-
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
 ### Installation
 
 1. Clone the repo
    ```sh
    git clone https://github.com/IngegneriaSoftware/C3.git
    ```
-3. Install NPM packages
+3. Install dependencies and compile
    ```sh
-   npm install
+   gradle build
    ```
 
 
